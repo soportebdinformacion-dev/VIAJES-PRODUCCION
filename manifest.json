@@ -1,8 +1,9 @@
 {
   "name": "Registro de Salidas & Retornos – Agrícola Huarmey",
   "short_name": "Salidas y Retornos",
-  "description": "Registro de rutas de salida y retorno – Packing, Campamento Agrícola Huarmey",
+  "description": "Registro de rutas de salida y retorno – Producción, Campamento Agrícola Huarmey",
   "lang": "es-PE",
+  "id": "./campo",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
