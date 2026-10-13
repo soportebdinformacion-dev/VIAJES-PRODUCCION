@@ -1,12 +1,12 @@
 /* =====================================================================
-   SERVICE WORKER – Registro de Salidas & Retornos (Agrícola Huarmey)
+   SERVICE WORKER – Registro de Salidas & Retornos – Producción (Agrícola Huarmey)
    Permite abrir la aplicación sin internet.
    IMPORTANTE: cada vez que modifique index.html, cambie el número de
    VERSION (por ejemplo 'v2') para que los teléfonos descarguen la
    versión nueva.
    ===================================================================== */
-const VERSION = 'v5';
-const CACHE = 'huarmey-packing-' + VERSION;
+const VERSION = 'v1';
+const CACHE = 'huarmey-campo-' + VERSION;
 const RECURSOS = [
   './',
   './index.html',
@@ -30,7 +30,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(claves => Promise.all(claves.filter(k => k.startsWith('huarmey-packing-') && k !== CACHE).map(k => caches.delete(k))))
+      .then(claves => Promise.all(claves.filter(k => k.startsWith('huarmey-campo-') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
