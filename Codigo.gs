@@ -5,7 +5,7 @@
    Qué hace:
    - Entrega la lista de colaboradores (hoja "maestros").
    - Registra colaboradores nuevos en "maestros" (sin duplicar DNI).
-   - Registra los viajes en la hoja "packing" (sin duplicar reintentos).
+   - Registra los viajes en la hoja "campo" (sin duplicar reintentos).
    - Valida los datos y el horario (miércoles todo el día, jueves hasta las 17:00, hora de Perú).
    - Responde siempre en formato JSON.
 
@@ -19,8 +19,8 @@ const CONFIG = {
   // ▲▲▲
 
   HOJA_MAESTROS: 'maestros',
-  HOJA_PACKING: 'packing',
-  HOJA_CONFIG: 'config',   // aquí se escribe la FECHA DE DESACTIVACIÓN manual (celda B1)
+  HOJA_PACKING: 'campo',
+  HOJA_CONFIG: 'config_campo',   // aquí se escribe la FECHA DE DESACTIVACIÓN manual (celda B1)
   ZONA: 'America/Lima',
 
   // La pestaña "Registros" de la app muestra solo los registros de la semana de pago actual
@@ -40,9 +40,10 @@ const CONFIG = {
   TOLERANCIA_EN_LINEA_MIN: 10
 };
 
-const AREAS = ['ALMACÉN','CALIDAD AGRÍCOLA','CÁMARA','DESPACHOS','ETIQUETADO','GESTIÓN HUMANA','LÍNEA DE PROCESO',
-  'MANTENIMIENTO','OPERACIONES','PRE FRÍO','RECEPCIÓN','SADEMA','SANEAMIENTO','SSOMA','TI'];
-const RUTAS = ['CHONGOYAPE','CUCULI','LA CRIA','PATAPO','TUMAN','CHICLAYO','LAMBAYEQUE','MORROPE','OLMOS','LA PAREJA','PIURA CENTRO','NINGUNO'];
+const AREAS = ['ALMACÉN','CALIDAD AGRÍCOLA','COCINA','FITOSANIDAD','GESTIÓN HUMANA','HOUSING','OPERACIONES',
+  'PRODUCCIÓN AGRICOLA (Arándano - Estibas)','PRODUCCIÓN AGRICOLA (Arándano)','RIEGO','SEGURIDAD PATRIMONIAL',
+  'SERVICIOS GENERALES','SIG','SSOMA','TALLER Y MAQUINARIA AGRÍCOLA'];
+const RUTAS = ['CHONGOYAPE','CUCULI','LA CRIA','PATAPO','TUMAN','CHICLAYO','LAMBAYEQUE','MORROPE','OLMOS','LA PAREJA','PIURA CENTRO','BAGUA','JAEN','NINGUNO'];
 
 // Encabezados. Las columnas A–G NO se modifican; H–M son de control interno.
 const ENC_MAESTROS = ['DNI','APELLIDOS Y NOMBRES','CELULAR'];
@@ -367,7 +368,7 @@ function crearContexto() {
   const libro = abrirLibro();
   const sm = libro.getSheetByName(CONFIG.HOJA_MAESTROS);
   const sp = libro.getSheetByName(CONFIG.HOJA_PACKING);
-  if (!sm || !sp) throw new Error('Faltan las hojas "maestros" y/o "packing". Ejecute configurarHojas().');
+  if (!sm || !sp) throw new Error('Faltan las hojas "maestros" y/o "campo". Ejecute configurarHojas().');
   const ids = {};
   const n = sp.getLastRow() - 1;
   if (n > 0) sp.getRange(2, 8, n, 1).getValues().forEach(function (f) { if (f[0]) ids[String(f[0])] = true; });
