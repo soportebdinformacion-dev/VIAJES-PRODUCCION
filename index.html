@@ -239,7 +239,7 @@ dialog::backdrop{background:rgba(25,40,20,.55)}
 
   <section class="titulo">
     <h1>REGISTRO DE SALIDAS &amp; RETORNOS</h1>
-    <p class="sub"><svg class="ico"><use href="#i-bus"/></svg>Packing – Campamento Agrícola Huarmey</p>
+    <p class="sub"><svg class="ico"><use href="#i-bus"/></svg>Producción – Campamento Agrícola Huarmey</p>
   </section>
 
   <!-- Estado de conexión y pendientes -->
@@ -372,7 +372,7 @@ dialog::backdrop{background:rgba(25,40,20,.55)}
     </div>
   </section>
 
-  <footer>Agrícola Huarmey · Packing – Campamento · Hora de referencia: Perú (America/Lima)</footer>
+  <footer>Agrícola Huarmey · Producción – Campamento · Hora de referencia: Perú (America/Lima)</footer>
 </main>
 
 <!-- =================== DIÁLOGO: NUEVO COLABORADOR =================== -->
@@ -457,7 +457,7 @@ dialog::backdrop{background:rgba(25,40,20,.55)}
    ===================================================================== */
 const CONFIG = {
   // 1) Pegue aquí la URL de la "aplicación web" de Apps Script (termina en /exec)
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxtRNI_ItPCh4GQ-f--UZkyNUXdXiuEfiYGR060FhrlYmPU_0Xx9P5WDUSvNmSsg9NMdA/exec',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzOaugAHPqDLh_FqcIxOV1qjt5y5Mv7fL2kJJdvxVt7opYE_xrg6PonyLpoZk8FhcXH/exec',
   ZONA: 'America/Lima',      // Zona horaria oficial
   TIMEOUT_MS: 25000,         // Tiempo máximo de espera por envío
   LOTE: 15,                  // Registros por envío al sincronizar
@@ -466,11 +466,12 @@ const CONFIG = {
 
 /* Listas fijas (el texto guardado en Sheets va SIN emoji) */
 const AREAS = [
-  ['📦','ALMACÉN'],['🌱','CALIDAD AGRÍCOLA'],['❄️','CÁMARA'],['🚚','DESPACHOS'],['🏷️','ETIQUETADO'],
-  ['👥','GESTIÓN HUMANA'],['⚙️','LÍNEA DE PROCESO'],['🔧','MANTENIMIENTO'],['🏭','OPERACIONES'],
-  ['🧊','PRE FRÍO'],['📥','RECEPCIÓN'],['⚡','SADEMA'],['🧹','SANEAMIENTO'],['🦺','SSOMA'],['💻','TI']
+  ['📦','ALMACÉN'],['🌱','CALIDAD AGRÍCOLA'],['🍽️','COCINA'],['🧪','FITOSANIDAD'],['👥','GESTIÓN HUMANA'],
+  ['🏠','HOUSING'],['⚙️','OPERACIONES'],['🫐🪑','PRODUCCIÓN AGRICOLA (Arándano - Estibas)'],
+  ['🫐🌱','PRODUCCIÓN AGRICOLA (Arándano)'],['💧','RIEGO'],['🛡️','SEGURIDAD PATRIMONIAL'],
+  ['🛠️','SERVICIOS GENERALES'],['📊','SIG'],['🦺','SSOMA'],['🚜🔧','TALLER Y MAQUINARIA AGRÍCOLA']
 ];
-const RUTAS = ['CHONGOYAPE','CUCULI','LA CRIA','PATAPO','TUMAN','CHICLAYO','LAMBAYEQUE','MORROPE','OLMOS','LA PAREJA','PIURA CENTRO','NINGUNO'];
+const RUTAS = ['CHONGOYAPE','CUCULI','LA CRIA','PATAPO','TUMAN','CHICLAYO','LAMBAYEQUE','MORROPE','OLMOS','LA PAREJA','PIURA CENTRO','BAGUA','JAEN','NINGUNO'];
 
 /* ---------------------------------------------------------------------
    Utilidades
@@ -525,7 +526,7 @@ function estadoHorario(ts){
 let db;
 function abrirDB(){
   return new Promise((res, rej) => {
-    const r = indexedDB.open('huarmey_packing', 1);
+    const r = indexedDB.open('huarmey_campo', 1);
     r.onupgradeneeded = () => {
       const d = r.result;
       d.createObjectStore('maestros', {keyPath:'dni'});
@@ -554,7 +555,7 @@ function dbReemplazarMaestros(lista){
    Comunicación con Apps Script
    --------------------------------------------------------------------- */
 async function llamar(metodo, datos, timeout = CONFIG.TIMEOUT_MS){
-  const codigo = localStorage.getItem('codigo_acceso') || '';
+  const codigo = localStorage.getItem('codigo_acceso_campo') || '';
   const ctrl = new AbortController(), to = setTimeout(() => ctrl.abort(), timeout);
   try{
     let resp;
@@ -928,7 +929,7 @@ async function guardarNuevo(ev){
 function pedirCodigo(){
   const d = $('dlgCodigo'); if (d.open) return;
   $('cInput').value = ''; err('cInput','');
-  if (localStorage.getItem('codigo_acceso')) err('cInput','El código no es correcto. Inténtelo otra vez.');
+  if (localStorage.getItem('codigo_acceso_campo')) err('cInput','El código no es correcto. Inténtelo otra vez.');
   d.showModal();
 }
 
@@ -1112,7 +1113,7 @@ function enlazar(){
   $('formCodigo').addEventListener('submit', e => {
     e.preventDefault();
     const v = $('cInput').value.trim(); if (!v){ err('cInput','Escriba el código.'); return; }
-    localStorage.setItem('codigo_acceso', v); $('dlgCodigo').close();
+    localStorage.setItem('codigo_acceso_campo', v); $('dlgCodigo').close();
     fallos = 0; actualizarMaestros(); sincronizar();
   });
   $('cCancelar').addEventListener('click', () => $('dlgCodigo').close());
