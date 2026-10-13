@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Registro de Salidas &amp; Retornos – Agrícola Huarmey</title>
+<meta name="theme-color" content="#84BD3F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Salidas y Retornos">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<style>
+/* =====================================================================
+   ESTILOS  (verde claro, rojo claro, blanco y neutros; mobile-first)
+   ===================================================================== */
+:root{
+  --verde:#84BD3F; --verde-osc:#2F6A1E; --verde-btn:#3A8423; --verde-claro:#EEF6E2; --verde-borde:#CFE3B0;
+  --rojo:#C9372F;  --rojo-claro:#FCE9E7;  --rojo-borde:#F1BDB8;
+  --ambar:#7A5200; --ambar-claro:#FFF3D6; --ambar-borde:#F0D58E;
+  --tinta:#243024; --tinta-2:#5B6B58; --fondo:#F5F8F0; --linea:#DAE3D0; --blanco:#fff;
+  --radio:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--fondo);color:var(--tinta);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.45;
+  padding-bottom:max(24px,env(safe-area-inset-bottom))}
+.ico{width:1.25em;height:1.25em;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+[hidden]{display:none!important}
+
+/* ---------- Membrete ---------- */
+.hero{background:var(--verde)}
+.hero img{display:block;width:100%;max-width:760px;height:auto;margin:0 auto}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px}
+
+/* ---------- Título ---------- */
+.titulo{text-align:center;padding:20px 4px 6px}
+.titulo h1{margin:0;font-size:clamp(20px,5.6vw,26px);font-weight:800;line-height:1.15;color:var(--verde-osc);letter-spacing:.2px}
+.titulo .sub{margin:8px 0 0;display:inline-flex;align-items:center;gap:8px;color:var(--tinta-2);font-size:15.5px;font-weight:500}
+.titulo .sub .ico{color:var(--rojo)}
+
+/* ---------- Barra de estado ---------- */
+.estado{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 4px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);
+  border-radius:999px;padding:7px 13px;font-size:14px;font-weight:600;font-family:inherit;min-height:38px}
+.chip.on{background:var(--verde-claro);border-color:var(--verde-borde);color:var(--verde-osc)}
+.chip.off{background:var(--rojo-claro);border-color:var(--rojo-borde);color:var(--rojo)}
+.chip.pend{background:var(--ambar-claro);border-color:var(--ambar-borde);color:var(--ambar)}
+button.chip{cursor:pointer}
+.girar{animation:giro 1s linear infinite}
+@keyframes giro{to{transform:rotate(360deg)}}
+.meta{text-align:center;color:var(--tinta-2);font-size:13px;margin:4px 0 0}
+
+/* ---------- Avisos ---------- */
+.aviso{display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:13px 14px;margin:12px 0;border:1px solid;font-size:15px}
+.aviso .ico{margin-top:2px;width:1.4em;height:1.4em}
+.aviso p{margin:0}
+.aviso p+p{margin-top:2px}
+.aviso.verde{background:var(--verde-claro);border-color:var(--verde-borde);color:#25501A}
+.aviso.rojo{background:var(--rojo-claro);border-color:var(--rojo-borde);color:#8F241E}
+.aviso.ambar{background:var(--ambar-claro);border-color:var(--ambar-borde);color:var(--ambar)}
+.info-box{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:6px 12px;margin:14px 0}
+.info-box .aviso{margin:8px 0}
+.cerrado{border-width:2px;font-weight:600}
+.cerrado .t{font-size:17px;font-weight:800;letter-spacing:.2px}
+.cerrado .s{font-weight:500;margin-top:4px}
+
+/* ---------- Tarjetas ---------- */
+fieldset{border:0;padding:0;margin:0;min-width:0}
+fieldset:disabled .card{opacity:.55}
+.card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:16px;margin:14px 0;box-shadow:0 1px 2px rgba(36,48,36,.06)}
+.card h2{display:flex;align-items:center;gap:11px;margin:0 0 14px;font-size:17px;font-weight:750}
+.card h2 .badge{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--verde-claro);color:var(--verde-osc)}
+.card h2 .badge.rojo{background:var(--rojo-claro);color:var(--rojo)}
+.card h2 small{display:block;font-weight:500;font-size:13px;color:var(--tinta-2)}
+label{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13.5px;margin:12px 0 6px;color:var(--tinta)}
+label .ico{color:var(--verde-osc);width:1.1em;height:1.1em}
+.campo{position:relative}
+input,select{width:100%;height:54px;border:1.5px solid #C8D5BB;border-radius:12px;background:var(--blanco);padding:0 14px;font:inherit;font-size:16px;color:var(--tinta);appearance:none;-webkit-appearance:none}
+input::placeholder{color:#8A9887}
+input:focus,select:focus,button:focus-visible{outline:3px solid rgba(132,189,63,.45);outline-offset:1px;border-color:var(--verde-btn)}
+input[readonly]{background:#F1F5EB;color:#34432F;font-weight:600}
+.campo.buscar input{padding-left:44px;padding-right:46px}
+.campo.buscar>.ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--tinta-2);pointer-events:none}
+.limpiar{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:42px;height:42px;border:0;border-radius:10px;background:transparent;color:var(--tinta-2);cursor:pointer;display:grid;place-items:center}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232F6A1E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:44px;text-overflow:ellipsis}
+.error-msg{display:none;margin:6px 2px 0;color:var(--rojo);font-size:14px;font-weight:600}
+.error-msg.ver{display:flex;gap:6px;align-items:center}
+.invalido{border-color:var(--rojo)!important;background:#FFF8F7}
+.dos{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:560px){.dos{grid-template-columns:1fr 1fr;gap:12px}}
+
+/* ---------- Resultados de búsqueda ---------- */
+.resultados{margin-top:8px;border:1px solid var(--linea);border-radius:12px;max-height:290px;overflow:auto;background:var(--blanco)}
+.res{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;border:0;border-bottom:1px solid #EDF2E6;background:transparent;padding:11px 14px;font:inherit;cursor:pointer;min-height:56px}
+.res:last-child{border-bottom:0}
+.res:hover,.res:focus-visible{background:var(--verde-claro)}
+.res b{font-size:15.5px}
+.res span{display:flex;gap:14px;flex-wrap:wrap;color:var(--tinta-2);font-size:13.5px}
+.res span i{font-style:normal;display:inline-flex;align-items:center;gap:5px}
+.res span .ico{width:1em;height:1em}
+.sin-res{padding:14px;color:var(--tinta-2);font-size:14.5px;display:flex;gap:10px;align-items:flex-start}
+.sin-res .ico{color:var(--rojo);margin-top:2px}
+.nuevo-box{padding:0 12px 12px}
+.badge-pend{display:inline-block;background:var(--ambar-claro);color:var(--ambar);border-radius:6px;padding:0 6px;font-size:11.5px;font-weight:700;margin-left:6px}
+
+/* ---------- Botones ---------- */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;border:0;border-radius:14px;font:inherit;font-size:17px;font-weight:800;letter-spacing:.3px;cursor:pointer;padding:0 16px}
+.btn:disabled{cursor:not-allowed;opacity:.6}
+.btn.primario{background:var(--verde-btn);color:#fff;box-shadow:0 3px 0 #28661A}
+.btn.primario:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #28661A}
+.btn.rojo{background:var(--rojo-claro);color:#A12B24;border:1.5px solid var(--rojo-borde);min-height:52px;font-size:15.5px}
+.btn.claro{background:var(--verde-claro);color:var(--verde-osc);border:1.5px solid var(--verde-borde);min-height:48px;font-size:15px}
+.btn.chico{min-height:42px;font-size:14px;width:auto;padding:0 14px;border-radius:10px}
+.cargando .ico-btn{display:none}
+.spin{display:none;width:22px;height:22px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:giro .8s linear infinite}
+.cargando .spin{display:inline-block}
+#form{margin-top:4px}
+.accion{margin:16px 0 8px}
+
+/* ---------- Resultado ---------- */
+.resultado{border-radius:var(--radio);border:2px solid;padding:16px;margin:14px 0;display:flex;gap:13px;align-items:flex-start}
+.resultado .ico{width:2em;height:2em;flex:none}
+.resultado h3{margin:0 0 4px;font-size:18px;font-weight:800}
+.resultado p{margin:2px 0}
+.resultado.ok{background:var(--verde-claro);border-color:var(--verde);color:#25501A}
+.resultado.pend{background:var(--ambar-claro);border-color:#E6B94A;color:var(--ambar)}
+.resultado.err{background:var(--rojo-claro);border-color:var(--rojo);color:#8F241E}
+.resultado .btn{margin-top:10px}
+
+/* ---------- Pendientes ---------- */
+.item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #EDF2E6}
+.item:last-child{border-bottom:0}
+.item .ico{margin-top:3px}
+.item .tx{flex:1;min-width:0;font-size:14.5px}
+.item .tx b{display:block;overflow-wrap:anywhere}
+.item .tx small{color:var(--tinta-2);display:block}
+.item .tx .e{color:var(--rojo);font-weight:600}
+.etq{font-size:12px;font-weight:800;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.etq.Pendiente{background:var(--ambar-claro);color:var(--ambar)}
+.etq.Error{background:var(--rojo-claro);color:var(--rojo)}
+.acc{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+footer{text-align:center;color:var(--tinta-2);font-size:12.5px;margin:20px 0 4px}
+
+/* ---------- Diálogos ---------- */
+dialog{border:0;border-radius:20px;padding:0;width:min(520px,calc(100% - 24px));color:var(--tinta);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(25,40,20,.55)}
+.dlg{padding:18px 18px 20px}
+.dlg h2{margin:0 0 4px;display:flex;align-items:center;gap:10px;font-size:19px}
+.dlg p.ayuda{margin:0 0 6px;color:var(--tinta-2);font-size:14px}
+.dlg .botones{display:grid;gap:10px;margin-top:18px}
+@media(min-width:480px){.dlg .botones{grid-template-columns:1fr 1fr}}
+.nota-dlg{margin-top:10px}
+
+
+/* ---------- Pestañas y lista de registros ---------- */
+.wrap.ancho{max-width:1040px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#E4ECD9;padding:5px;border-radius:15px;margin:14px 0 0}
+.tab{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border:0;border-radius:11px;background:transparent;color:var(--tinta-2);font:inherit;font-size:15.5px;font-weight:700;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--blanco);color:var(--verde-osc);box-shadow:0 1px 3px rgba(36,48,36,.18)}
+.tabla{max-height:68vh;overflow:auto;margin-top:12px;border:1px solid var(--linea);border-radius:12px;padding:0 12px;-webkit-overflow-scrolling:touch}
+.fila{display:grid;grid-template-columns:96px 1fr;gap:3px 10px;padding:12px 0;border-bottom:1px solid #EDF2E6;font-size:15px;align-items:start}
+.fila:last-child{border-bottom:0}
+.fila .dni{font-weight:700;color:var(--verde-osc);font-variant-numeric:tabular-nums}
+.fila .nom{overflow-wrap:anywhere;font-weight:600}
+.fila .fec,.fila .rs,.fila .rr{grid-column:2;font-size:13.5px;color:var(--tinta-2)}
+.fila .rs b,.fila .rr b{color:var(--tinta);font-weight:700}
+.fila .ac{grid-column:1/-1;display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.fila .pre{font-style:normal}
+.fila.cab{display:none}
+.quedan{font-size:12.5px;color:var(--tinta-2);font-weight:600}
+.btn.bloq{background:#ECEFE8;color:#76806F;border:1.5px solid #D5DCCC}
+.btn.chico svg.ico{width:1.1em;height:1.1em}
+.conteo{margin:10px 2px 0;color:var(--tinta-2);font-size:13.5px}
+.vacio{padding:18px 4px;color:var(--tinta-2);display:flex;gap:10px;align-items:flex-start;font-size:14.5px}
+@media(min-width:880px){
+  .fila{grid-template-columns:96px minmax(160px,1fr) 128px 112px 112px 132px;gap:10px;align-items:center}
+  .fila .fec,.fila .rs,.fila .rr{grid-column:auto;font-size:14.5px;color:var(--tinta)}
+  .fila .ac{grid-column:auto;margin-top:0;flex-direction:column;align-items:stretch;gap:3px}
+  .fila .pre{display:none}
+  .fila.cab{display:grid;position:sticky;top:0;background:var(--blanco);padding:9px 0;z-index:1}
+  .fila.cab span{font-size:12px;font-weight:800;color:var(--tinta-2)}
+}
+
+@media(prefers-reduced-motion:reduce){.girar,.spin{animation-duration:3s}}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================================
+     ICONOS (sprite SVG interno, sin dependencias externas)
+     ===================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-bus" viewBox="0 0 24 24"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-id" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M14 10h5"/><path d="M14 14h5"/><path d="M5 17c.5-1.5 1.7-2 3-2s2.5.5 3 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-area" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+  <symbol id="i-sale" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></symbol>
+  <symbol id="i-vuelve" viewBox="0 0 24 24"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></symbol>
+  <symbol id="i-ruta" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></symbol>
+  <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/><path d="M5 12.86a10 10 0 0 1 5.17-2.7"/><path d="M19 12.86a10 10 0 0 0-2.01-1.45"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="m2 2 20 20"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8"/><path d="m16 7 3 3"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+</svg>
+
+<!-- =====================================================================
+     ENCABEZADO
+     ===================================================================== -->
+<header class="hero">
+  <img src="membrete.png" width="1489" height="363" alt="Agrícola Huarmey – Campamento Huarmey – Registro de Ingresos y Salidas">
+</header>
+
+<main class="wrap" id="wrap">
+
+  <section class="titulo">
+    <h1>REGISTRO DE SALIDAS &amp; RETORNOS</h1>
+    <p class="sub"><svg class="ico"><use href="#i-bus"/></svg>Packing – Campamento Agrícola Huarmey</p>
+  </section>
+
+  <!-- Estado de conexión y pendientes -->
+  <div class="estado" aria-live="polite">
+    <span id="chipRed" class="chip on"><svg class="ico"><use href="#i-wifi"/></svg><span>En línea</span></span>
+    <button id="chipPend" type="button" class="chip" title="Sincronizar ahora"><svg class="ico"><use href="#i-sync"/></svg><span>0 pendientes</span></button>
+    <button id="btnInstalar" type="button" class="chip on" hidden><svg class="ico"><use href="#i-install"/></svg><span>Instalar app</span></button>
+  </div>
+  <p id="meta" class="meta"></p>
+
+  <div id="avisoConfig" class="aviso rojo" hidden>
+    <svg class="ico"><use href="#i-alert"/></svg>
+    <div><p><b>Falta configurar la aplicación.</b></p><p>Abra index.html y pegue la URL de Apps Script en <code>APPS_SCRIPT_URL</code>.</p></div>
+  </div>
+
+  <!-- Pestañas -->
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button id="tabRegistro" type="button" class="tab" role="tab" aria-selected="true"><svg class="ico"><use href="#i-send"/></svg>Registrar</button>
+    <button id="tabLista" type="button" class="tab" role="tab" aria-selected="false"><svg class="ico"><use href="#i-list"/></svg>Registros</button>
+  </nav>
+
+  <div id="vistaRegistro">
+  <!-- Mensaje informativo -->
+  <div class="info-box">
+    <div class="aviso verde">
+      <svg class="ico"><use href="#i-cal"/></svg>
+      <p>📢 📅 El formulario estará habilitado durante todo el día miércoles y el jueves hasta las 05:00 p. m., correspondiente a la semana de pago.</p>
+    </div>
+    <div class="aviso rojo">
+      <svg class="ico"><use href="#i-alert"/></svg>
+      <p>📝 🚨 Se solicita a todos los colaboradores realizar su registro de manera correcta, completa y dentro del plazo establecido.</p>
+    </div>
+  </div>
+
+  <!-- Formulario cerrado -->
+  <div id="cerrado" class="aviso rojo cerrado" hidden role="alert">
+    <svg class="ico"><use href="#i-lock"/></svg>
+    <div>
+      <p class="t">🔒 EL PLAZO DE REGISTRO HA FINALIZADO.</p>
+      <p id="cerradoCuando" class="s"></p>
+    </div>
+  </div>
+  <div id="abierto" class="aviso verde" hidden>
+    <svg class="ico"><use href="#i-clock"/></svg>
+    <p id="abiertoTxt"></p>
+  </div>
+
+  <!-- Resultado del último registro -->
+  <div id="resultado" hidden role="status"></div>
+
+  <!-- =================== FORMULARIO =================== -->
+  <form id="form" novalidate autocomplete="off">
+    <fieldset id="fs">
+
+      <!-- 1. Colaborador -->
+      <div class="card">
+        <h2><span class="badge"><svg class="ico"><use href="#i-users"/></svg></span><span>Colaborador<small>Busque por DNI o por nombre</small></span></h2>
+
+        <label for="buscar"><svg class="ico"><use href="#i-search"/></svg>DNI O APELLIDOS Y NOMBRES</label>
+        <div class="campo buscar">
+          <svg class="ico"><use href="#i-search"/></svg>
+          <input id="buscar" type="text" inputmode="search" enterkeyhint="search" placeholder="Ej.: 42048377 o CHAVEZ" autocapitalize="characters" spellcheck="false" aria-controls="resultados" aria-expanded="false">
+          <button id="limpiar" type="button" class="limpiar" aria-label="Borrar búsqueda" hidden><svg class="ico"><use href="#i-x"/></svg></button>
+        </div>
+        <div id="resultados" class="resultados" role="listbox" hidden></div>
+        <p id="e-buscar" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+
+        <label for="fDni"><svg class="ico"><use href="#i-id"/></svg>DNI</label>
+        <input id="fDni" type="text" readonly placeholder="Se completa al elegir al colaborador" tabindex="-1">
+        <label for="fNombre"><svg class="ico"><use href="#i-user"/></svg>APELLIDOS Y NOMBRES</label>
+        <input id="fNombre" type="text" readonly placeholder="Se completa al elegir al colaborador" tabindex="-1">
+        <label for="fCel"><svg class="ico"><use href="#i-phone"/></svg>CELULAR</label>
+        <input id="fCel" type="text" readonly placeholder="Se completa al elegir al colaborador" tabindex="-1">
+      </div>
+
+      <!-- 2. Área -->
+      <div class="card">
+        <h2><span class="badge"><svg class="ico"><use href="#i-area"/></svg></span><span>Área de trabajo<small>Elija el área donde labora</small></span></h2>
+        <label for="area"><svg class="ico"><use href="#i-area"/></svg>ÁREA</label>
+        <select id="area" required></select>
+        <p id="e-area" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+      </div>
+
+      <!-- 3. Rutas -->
+      <div class="card">
+        <h2><span class="badge rojo"><svg class="ico"><use href="#i-ruta"/></svg></span><span>Rutas de viaje<small>Pueden ser distintas</small></span></h2>
+        <div class="dos">
+          <div>
+            <label for="rutaSalida"><svg class="ico"><use href="#i-sale"/></svg>SELECCIONE SU RUTA DE SALIDA</label>
+            <select id="rutaSalida" required></select>
+            <p id="e-rutaSalida" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+          </div>
+          <div>
+            <label for="rutaRetorno"><svg class="ico"><use href="#i-vuelve"/></svg>SELECCIONE SU RUTA PARA RETORNO</label>
+            <select id="rutaRetorno" required></select>
+            <p id="e-rutaRetorno" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accion">
+        <button id="btnGuardar" type="submit" class="btn primario">
+          <svg class="ico ico-btn"><use href="#i-send"/></svg><span class="spin"></span><span id="btnTxt">GUARDAR REGISTRO</span>
+        </button>
+      </div>
+    </fieldset>
+  </form>
+
+  <!-- Registros locales pendientes / con error -->
+  <section id="cardPend" class="card" hidden>
+    <h2><span class="badge rojo"><svg class="ico"><use href="#i-list"/></svg></span><span>Envíos por sincronizar<small>Se guardan en este dispositivo hasta confirmarse</small></span></h2>
+    <div id="listaPend"></div>
+  </section>
+  </div><!-- /vistaRegistro -->
+
+  <!-- =================== PESTAÑA: REGISTROS GUARDADOS (solo visualización) =================== -->
+  <section id="vistaLista" hidden>
+    <div class="card">
+      <h2><span class="badge"><svg class="ico"><use href="#i-users"/></svg></span><span>Registros guardados<small id="listaMeta">Solo consulta</small></span></h2>
+      <label for="bLista"><svg class="ico"><use href="#i-search"/></svg>DNI O APELLIDOS Y NOMBRES</label>
+      <div class="campo buscar">
+        <svg class="ico"><use href="#i-search"/></svg>
+        <input id="bLista" type="text" inputmode="search" enterkeyhint="search" placeholder="Ej.: 42048377 o CHAVEZ" autocapitalize="characters" spellcheck="false" autocomplete="off">
+        <button id="limpiarLista" type="button" class="limpiar" aria-label="Borrar búsqueda" hidden><svg class="ico"><use href="#i-x"/></svg></button>
+      </div>
+      <div id="listaAviso" class="aviso verde" hidden role="status"></div>
+      <p id="listaConteo" class="conteo" aria-live="polite"></p>
+      <div id="listaRegs" class="tabla"></div>
+      <div class="accion" style="margin-bottom:0"><button id="btnRefrescar" type="button" class="btn claro"><svg class="ico"><use href="#i-sync"/></svg><span id="btnRefTxt">Actualizar lista</span></button></div>
+    </div>
+  </section>
+
+  <footer>Agrícola Huarmey · Packing – Campamento · Hora de referencia: Perú (America/Lima)</footer>
+</main>
+
+<!-- =================== DIÁLOGO: NUEVO COLABORADOR =================== -->
+<dialog id="dlgNuevo">
+  <form id="formNuevo" class="dlg" novalidate autocomplete="off" method="dialog">
+    <h2><svg class="ico" style="color:var(--rojo)"><use href="#i-user-plus"/></svg>Registrar nuevo colaborador</h2>
+    <p class="ayuda">Complete los tres datos. Se guardará en la lista de colaboradores.</p>
+
+    <label for="nDni"><svg class="ico"><use href="#i-id"/></svg>DNI (8 dígitos)</label>
+    <input id="nDni" type="text" inputmode="numeric" maxlength="8" placeholder="Ej.: 00481325">
+    <p id="e-nDni" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+
+    <label for="nNombre"><svg class="ico"><use href="#i-user"/></svg>APELLIDOS Y NOMBRES</label>
+    <input id="nNombre" type="text" autocapitalize="characters" placeholder="Ej.: CHAVEZ JULCA JOSE">
+    <p id="e-nNombre" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+
+    <label for="nCel"><svg class="ico"><use href="#i-phone"/></svg>CELULAR</label>
+    <input id="nCel" type="tel" inputmode="numeric" maxlength="14" placeholder="Ej.: 987654321">
+    <p id="e-nCel" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+
+    <div id="nDuplicado" class="aviso ambar nota-dlg" hidden>
+      <svg class="ico"><use href="#i-alert"/></svg>
+      <div><p id="nDuplicadoTxt"></p><button type="button" id="btnUsarExistente" class="btn claro chico" style="margin-top:8px">Usar este colaborador</button></div>
+    </div>
+
+    <div class="botones">
+      <button type="button" id="nCancelar" class="btn claro">Cancelar</button>
+      <button type="submit" id="nGuardar" class="btn primario"><span class="spin"></span><span id="nGuardarTxt">GUARDAR</span></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- =================== DIÁLOGO: MODIFICAR RUTAS =================== -->
+<dialog id="dlgMod">
+  <form id="formMod" class="dlg" novalidate autocomplete="off" method="dialog">
+    <h2><svg class="ico" style="color:var(--rojo)"><use href="#i-swap"/></svg>Modificar rutas</h2>
+    <p class="ayuda" id="mQuien"></p>
+    <div class="aviso ambar nota-dlg"><svg class="ico"><use href="#i-alert"/></svg><p id="mRestan"></p></div>
+
+    <label for="mSalida"><svg class="ico"><use href="#i-sale"/></svg>RUTA SALIDA</label>
+    <select id="mSalida"></select>
+    <p id="e-mSalida" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+
+    <label for="mRetorno"><svg class="ico"><use href="#i-vuelve"/></svg>RUTA RETORNO</label>
+    <select id="mRetorno"></select>
+    <p id="e-mRetorno" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+
+    <div id="mCelBox">
+      <label for="mCel"><svg class="ico"><use href="#i-phone"/></svg>CELULAR (para confirmar que es su registro)</label>
+      <input id="mCel" type="tel" inputmode="numeric" maxlength="14" placeholder="Ej.: 987654321">
+      <p id="e-mCel" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+    </div>
+
+    <div id="mError" class="aviso rojo nota-dlg" hidden><svg class="ico"><use href="#i-x-circle"/></svg><p id="mErrorTxt"></p></div>
+
+    <div class="botones">
+      <button type="button" id="mCancelar" class="btn claro">Cancelar</button>
+      <button type="submit" id="mGuardar" class="btn primario"><span class="spin"></span><span id="mGuardarTxt">GUARDAR CAMBIOS</span></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- =================== DIÁLOGO: CÓDIGO DE ACCESO =================== -->
+<dialog id="dlgCodigo">
+  <form id="formCodigo" class="dlg" method="dialog" autocomplete="off">
+    <h2><svg class="ico" style="color:var(--verde-osc)"><use href="#i-key"/></svg>Código de acceso</h2>
+    <p class="ayuda">Ingrese el código que le dio el responsable. Solo se pide una vez en este dispositivo.</p>
+    <label for="cInput"><svg class="ico"><use href="#i-lock"/></svg>CÓDIGO</label>
+    <input id="cInput" type="password" autocomplete="off">
+    <p id="e-cInput" class="error-msg"><svg class="ico"><use href="#i-alert"/></svg><span></span></p>
+    <div class="botones">
+      <button type="button" id="cCancelar" class="btn claro">Ahora no</button>
+      <button type="submit" class="btn primario">ACEPTAR</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+'use strict';
+/* =====================================================================
+   CONFIGURACIÓN  ←←←  SOLO DEBE CAMBIAR LA PRIMERA LÍNEA
+   ===================================================================== */
+const CONFIG = {
+  // 1) Pegue aquí la URL de la "aplicación web" de Apps Script (termina en /exec)
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxtRNI_ItPCh4GQ-f--UZkyNUXdXiuEfiYGR060FhrlYmPU_0Xx9P5WDUSvNmSsg9NMdA/exec',
+  ZONA: 'America/Lima',      // Zona horaria oficial
+  TIMEOUT_MS: 25000,         // Tiempo máximo de espera por envío
+  LOTE: 15,                  // Registros por envío al sincronizar
+  DIAS_HISTORIAL: 3          // Días que se conservan los envíos ya sincronizados
+};
+
+/* Listas fijas (el texto guardado en Sheets va SIN emoji) */
+const AREAS = [
+  ['📦','ALMACÉN'],['🌱','CALIDAD AGRÍCOLA'],['❄️','CÁMARA'],['🚚','DESPACHOS'],['🏷️','ETIQUETADO'],
+  ['👥','GESTIÓN HUMANA'],['⚙️','LÍNEA DE PROCESO'],['🔧','MANTENIMIENTO'],['🏭','OPERACIONES'],
+  ['🧊','PRE FRÍO'],['📥','RECEPCIÓN'],['⚡','SADEMA'],['🧹','SANEAMIENTO'],['🦺','SSOMA'],['💻','TI']
+];
+const RUTAS = ['CHONGOYAPE','CUCULI','LA CRIA','PATAPO','TUMAN','CHICLAYO','LAMBAYEQUE','MORROPE','OLMOS','LA PAREJA','PIURA CENTRO','NINGUNO'];
+
+/* ---------------------------------------------------------------------
+   Utilidades
+   --------------------------------------------------------------------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+const ico = (n, extra='') => `<svg class="ico ${extra}"><use href="#i-${n}"/></svg>`;
+const configurado = () => /^https:\/\/script\.google(usercontent)?\.com\//.test(CONFIG.APPS_SCRIPT_URL);
+const pad = n => String(n).padStart(2,'0');
+let _seq = 0;
+const nuevoSeq = () => Date.now()*1000 + (_seq++ % 1000);
+function uuid(){
+  if (crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,10);
+}
+
+/* ---------------------------------------------------------------------
+   Hora de Perú. Se corrige con la hora del servidor cuando hay internet
+   (offset) para que cambiar la hora del teléfono no sirva de nada
+   mientras el equipo tenga conexión.
+   --------------------------------------------------------------------- */
+let offset = 0;
+let habilita = null;    // fecha/hora (ms) de habilitación manual (hoja "config", B2)
+let desactiva = null;   // fecha/hora (ms) de desactivación manual, definida en la hoja "config"
+const hora = () => Date.now() + offset;
+const fmtLima = new Intl.DateTimeFormat('en-US',{timeZone:CONFIG.ZONA,hourCycle:'h23',weekday:'short',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const DOW = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+function limaParts(ts){
+  const o = {}; fmtLima.formatToParts(new Date(ts)).forEach(p => o[p.type] = p.value);
+  return {y:+o.year, m:+o.month, d:+o.day, h:(+o.hour)%24, mi:+o.minute, s:+o.second, dow:DOW[o.weekday]};
+}
+const fechaLima = ts => { const p = limaParts(ts); return `${pad(p.d)}/${pad(p.m)}/${p.y} ${pad(p.h)}:${pad(p.mi)}`; };
+/* Miércoles todo el día; jueves hasta antes de las 17:00. Resto: cerrado. */
+function estadoHorario(ts){
+  const p = limaParts(ts);
+  const porHorario = p.dow === 3 || (p.dow === 4 && p.h < 17);
+  const manual = desactiva !== null && ts >= desactiva;      // desactivada a mano
+  const habil = habilita !== null && ts >= habilita;          // habilitada a mano
+  const abierto = (porHorario || habil) && !manual;
+  let proxima = null;
+  if (!abierto && !manual){
+    const dias = ((3 - p.dow) + 7) % 7 || 7;
+    proxima = new Date(Date.UTC(p.y, p.m-1, p.d + dias));
+  }
+  return {abierto, p, proxima, manual, porHorario};
+}
+
+/* ---------------------------------------------------------------------
+   IndexedDB: maestros (colaboradores), outbox (cola de envíos), meta
+   --------------------------------------------------------------------- */
+let db;
+function abrirDB(){
+  return new Promise((res, rej) => {
+    const r = indexedDB.open('huarmey_packing', 1);
+    r.onupgradeneeded = () => {
+      const d = r.result;
+      d.createObjectStore('maestros', {keyPath:'dni'});
+      d.createObjectStore('outbox',   {keyPath:'id'});
+      d.createObjectStore('meta',     {keyPath:'k'});
+    };
+    r.onsuccess = () => { db = r.result; res(); };
+    r.onerror = () => rej(r.error);
+  });
+}
+const rq = r => new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+const st = (s, m='readonly') => db.transaction(s, m).objectStore(s);
+const dbGet = (s,k) => rq(st(s).get(k));
+const dbAll = s => rq(st(s).getAll());
+const dbPut = (s,v) => rq(st(s,'readwrite').put(v));
+const dbDel = (s,k) => rq(st(s,'readwrite').delete(k));
+function dbReemplazarMaestros(lista){
+  return new Promise((res, rej) => {
+    const t = db.transaction('maestros','readwrite'), s = t.objectStore('maestros');
+    s.clear(); lista.forEach(m => s.put(m));
+    t.oncomplete = res; t.onerror = () => rej(t.error);
+  });
+}
+
+/* ---------------------------------------------------------------------
+   Comunicación con Apps Script
+   --------------------------------------------------------------------- */
+async function llamar(metodo, datos, timeout = CONFIG.TIMEOUT_MS){
+  const codigo = localStorage.getItem('codigo_acceso') || '';
+  const ctrl = new AbortController(), to = setTimeout(() => ctrl.abort(), timeout);
+  try{
+    let resp;
+    if (metodo === 'GET'){
+      const q = new URLSearchParams({...datos, codigo});
+      resp = await fetch(CONFIG.APPS_SCRIPT_URL + '?' + q, {signal:ctrl.signal, redirect:'follow'});
+    } else {
+      // text/plain evita la "pre-solicitud" CORS que Apps Script no admite
+      resp = await fetch(CONFIG.APPS_SCRIPT_URL, {method:'POST', signal:ctrl.signal, redirect:'follow',
+        headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({...datos, codigo})});
+    }
+    const txt = await resp.text();
+    try { return JSON.parse(txt); }
+    catch(e){ const er = new Error('Respuesta no válida del servidor'); er.config = true; throw er; }
+  } finally { clearTimeout(to); }
+}
+async function sincronizarReloj(timeout = 4000){
+  if (!configurado() || !navigator.onLine) return false;
+  try{
+    const t0 = Date.now();
+    const r = await llamar('GET', {action:'estado'}, timeout);
+    const t1 = Date.now();
+    if (r && r.ok && r.ts){
+      offset = r.ts - (t0 + t1)/2;
+      await dbPut('meta', {k:'offset', v:offset});
+      desactiva = (typeof r.desactiva === 'number') ? r.desactiva : null;
+      await dbPut('meta', {k:'desactiva', v:desactiva});
+      habilita = (typeof r.habilita === 'number') ? r.habilita : null;
+      await dbPut('meta', {k:'habilita', v:habilita});
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+/* ---------------------------------------------------------------------
+   Colaboradores: índice de búsqueda en memoria
+   --------------------------------------------------------------------- */
+let INDICE = [];
+async function cargarIndice(){
+  const l = await dbAll('maestros');
+  INDICE = l.map(m => ({...m, hay: norm(m.dni + ' ' + m.nombre)}));
+  pintarMeta();
+}
+async function actualizarMaestros(){
+  if (!configurado() || !navigator.onLine) return;
+  try{
+    const r = await llamar('GET', {action:'maestros'});
+    if (r.ok && Array.isArray(r.datos)){
+      const lista = r.datos.map(a => ({dni:a[0], nombre:a[1], celular:a[2]}));
+      const vistos = new Set(lista.map(m => m.dni));
+      (await dbAll('outbox')).filter(i => i.tipo==='maestro' && i.estado!=='Sincronizado').forEach(i => {
+        if (!vistos.has(i.datos.dni)) lista.push({dni:i.datos.dni, nombre:i.datos.nombre, celular:i.datos.celular, pendiente:true});
+      });
+      await dbReemplazarMaestros(lista);
+      await dbPut('meta', {k:'maestrosSync', v:Date.now()});
+      await cargarIndice();
+    } else if (r.codigo === 'AUTH') pedirCodigo();
+  }catch(e){ /* sin conexión: se usa la copia local */ }
+}
+async function pintarMeta(){
+  const m = await dbGet('meta','maestrosSync');
+  $('meta').textContent = INDICE.length
+    ? `${INDICE.length.toLocaleString('es-PE')} colaboradores disponibles${m ? ' · actualizado ' + fechaLima(m.v) : ''}`
+    : 'Aún no hay lista de colaboradores en este dispositivo.';
+}
+
+/* ---------------------------------------------------------------------
+   Buscador (parcial, sin tildes ni mayúsculas)
+   --------------------------------------------------------------------- */
+let sel = null;          // colaborador seleccionado
+function buscar(q){
+  const t = norm(q).split(' ').filter(Boolean);
+  if (!t.length) return [];
+  const r = INDICE.filter(m => t.every(x => m.hay.includes(x)));
+  const nq = norm(q);
+  r.sort((a,b) => {
+    const pa = (a.dni.startsWith(nq) || norm(a.nombre).startsWith(nq)) ? 0 : 1;
+    const pb = (b.dni.startsWith(nq) || norm(b.nombre).startsWith(nq)) ? 0 : 1;
+    return pa - pb || a.nombre.localeCompare(b.nombre,'es');
+  });
+  return r;
+}
+function pintarResultados(){
+  const box = $('resultados'), q = $('buscar').value;
+  $('limpiar').hidden = !q;
+  if (sel && norm(q) === norm(sel.dni + ' ' + sel.nombre)) { box.hidden = true; return; }
+  if (norm(q).length < 2){ box.hidden = true; $('buscar').setAttribute('aria-expanded','false'); return; }
+  const r = buscar(q);
+  box.hidden = false; $('buscar').setAttribute('aria-expanded','true');
+  if (!r.length){
+    const bloqueado = $('fs').disabled;
+    box.innerHTML = `<div class="sin-res">${ico('alert')}<div>No se encontró ningún colaborador con “${esc(q.trim())}”.${
+      INDICE.length ? '' : ' Conéctese a internet al menos una vez para descargar la lista.'}</div></div>` +
+      (bloqueado ? '' : `<div class="nuevo-box"><button type="button" id="btnNuevo" class="btn rojo">${ico('user-plus')}+ REGISTRAR NUEVO COLABORADOR</button></div>`);
+    return;
+  }
+  box.innerHTML = r.slice(0,40).map(m =>
+    `<button type="button" class="res" role="option" data-dni="${esc(m.dni)}"><b>${esc(m.nombre)}${m.pendiente?'<em class="badge-pend">por enviar</em>':''}</b>
+     <span><i>${ico('id')}${esc(m.dni)}</i><i>${ico('phone')}${esc(m.celular||'—')}</i></span></button>`).join('') +
+    (r.length > 40 ? `<div class="sin-res">Se muestran 40 de ${r.length}. Escriba más letras para afinar.</div>` : '');
+}
+function seleccionar(m){
+  sel = m;
+  $('fDni').value = m.dni; $('fNombre').value = m.nombre; $('fCel').value = m.celular || '';
+  $('buscar').value = m.nombre; $('resultados').hidden = true; $('limpiar').hidden = false;
+  err('buscar','');
+}
+function deseleccionar(){ sel = null; $('fDni').value = $('fNombre').value = $('fCel').value = ''; }
+
+/* ---------------------------------------------------------------------
+   Selects
+   --------------------------------------------------------------------- */
+function llenarSelects(){
+  $('area').innerHTML = '<option value="">SELECCIONE SU ÁREA</option>' + AREAS.map(a => `<option value="${a[1]}">${a[0]} ${a[1]}</option>`).join('');
+  const r = '<option value="">SELECCIONE…</option>' + RUTAS.map(x => `<option value="${x}">${x}</option>`).join('');
+  $('rutaSalida').innerHTML = r; $('rutaRetorno').innerHTML = r;
+  const rm = RUTAS.map(x => `<option value="${x}">${x}</option>`).join('');
+  $('mSalida').innerHTML = rm; $('mRetorno').innerHTML = rm;
+}
+function err(campo, msg){
+  const p = $('e-' + campo); if (!p) return;
+  p.classList.toggle('ver', !!msg); p.querySelector('span').textContent = msg || '';
+  const el = $(campo); if (el) el.classList.toggle('invalido', !!msg);
+}
+
+/* ---------------------------------------------------------------------
+   Horario: abrir / cerrar el formulario
+   --------------------------------------------------------------------- */
+const DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+let ultimoAbierto = null;
+function evaluarHorario(){
+  const e = estadoHorario(hora());
+  if (ultimoAbierto !== e.abierto){ const antes = ultimoAbierto; ultimoAbierto = e.abierto; if (antes !== null && db && !$('vistaLista').hidden) pintarLista(); }
+  $('fs').disabled = !e.abierto;
+  $('cerrado').hidden = e.abierto;
+  $('abierto').hidden = !e.abierto;
+  if (e.abierto){
+    $('abiertoTxt').textContent = e.p.dow === 3
+      ? 'Formulario habilitado hoy (miércoles) hasta las 11:59 p. m. · el jueves cierra a las 05:00 p. m.'
+      : 'Formulario habilitado hasta hoy (jueves) a las 05:00 p. m.';
+    if (!e.porHorario) $('abiertoTxt').textContent = `Formulario habilitado por el responsable (desde ${fechaLima(habilita)}).`;
+    if (desactiva !== null) $('abiertoTxt').textContent += ` · Se desactivará el ${fechaLima(desactiva)}.`;
+  } else if (e.manual){
+    $('cerradoCuando').textContent = `La aplicación fue desactivada el ${fechaLima(desactiva)} (hora de Perú). Consulte con el responsable cuándo volverá a habilitarse.`;
+    $('resultados').hidden = true;
+  } else {
+    const d = e.proxima;
+    $('cerradoCuando').textContent = `El formulario estará disponible nuevamente el miércoles ${pad(d.getUTCDate())}/${pad(d.getUTCMonth()+1)}/${d.getUTCFullYear()} desde las 00:00 (hora de Perú).`;
+    $('resultados').hidden = true;
+  }
+  return e.abierto;
+}
+
+/* ---------------------------------------------------------------------
+   Estado de conexión y cola
+   --------------------------------------------------------------------- */
+let sincronizando = false;
+async function pintarEstado(){
+  const on = navigator.onLine;
+  const c = $('chipRed');
+  c.className = 'chip ' + (on ? 'on' : 'off');
+  c.innerHTML = ico(on ? 'wifi' : 'wifi-off') + `<span>${on ? 'En línea' : 'Sin conexión'}</span>`;
+  const pend = (await dbAll('outbox')).filter(i => i.estado !== 'Sincronizado');
+  const p = $('chipPend');
+  p.className = 'chip' + (pend.length ? ' pend' : ' on');
+  p.innerHTML = ico('sync', sincronizando ? 'girar' : '') + `<span>${sincronizando ? 'Sincronizando…' : pend.length + (pend.length === 1 ? ' pendiente' : ' pendientes')}</span>`;
+  $('cardPend').hidden = !pend.length;
+  $('listaPend').innerHTML = pend.sort((a,b) => a.seq - b.seq).map(i => {
+    const titulo = i.tipo === 'maestro' ? 'Nuevo colaborador' : 'Registro de viaje';
+    const det = i.tipo === 'maestro' ? `DNI ${esc(i.datos.dni)}` : `${esc(i.datos.area)} · Sale: ${esc(i.datos.rutaSalida)} · Retorna: ${esc(i.datos.rutaRetorno)}`;
+    return `<div class="item">${ico(i.estado==='Error' ? 'x-circle' : 'clock')}<div class="tx"><b>${titulo}: ${esc(i.datos.nombre)}</b>
+      <small>${det}</small><small>Creado ${fechaLima(new Date(i.creadoEn).getTime())}</small>
+      ${i.error ? `<span class="e">${esc(i.error)}</span>` : ''}
+      ${i.estado==='Error' ? `<div class="acc"><button class="btn claro chico" data-reint="${i.id}">${ico('sync')}Reintentar</button><button class="btn rojo chico" data-desc="${i.id}">${ico('trash')}Descartar</button></div>` : ''}
+      </div><span class="etq ${i.estado}">${i.estado}</span></div>`;
+  }).join('');
+}
+
+/* Reintentos controlados: espera creciente (15 s, 30 s, 60 s … máx. 5 min) */
+let fallos = 0, proxAuto = 0, promesaSync = null;
+function sincronizar(){
+  if (!promesaSync) promesaSync = _sincronizar().finally(() => { promesaSync = null; });
+  return promesaSync;
+}
+async function _sincronizar(){
+  if (!configurado() || !navigator.onLine) return;
+  sincronizando = true; pintarEstado();
+  try{
+    for(;;){
+      const cola = (await dbAll('outbox')).filter(i => i.estado === 'Pendiente').sort((a,b) => a.seq - b.seq);
+      if (!cola.length) break;
+      const lote = cola.slice(0, CONFIG.LOTE);
+      let r;
+      try{
+        r = await llamar('POST', {action:'sincronizar', items: lote.map(i => ({id:i.id, tipo:i.tipo, creadoEn:i.creadoEn, datos:i.datos}))});
+      }catch(e){
+        fallos++; proxAuto = Date.now() + Math.min(300000, 15000 * 2**fallos);
+        if (e.config) $('avisoConfig').hidden = false, $('avisoConfig').querySelector('div').innerHTML =
+          '<p><b>El servidor no respondió como se esperaba.</b></p><p>Revise que la implementación de Apps Script permita acceso a “Cualquier persona” y que la URL sea la correcta.</p>';
+        break;
+      }
+      if (!r || !r.ok){
+        if (r && r.codigo === 'AUTH') pedirCodigo();
+        fallos++; proxAuto = Date.now() + Math.min(300000, 15000 * 2**fallos);
+        break;
+      }
+      fallos = 0;
+      for (const res of (r.resultados || [])){
+        const it = lote.find(x => x.id === res.id); if (!it) continue;
+        it.intentos = (it.intentos || 0) + 1;
+        if (res.ok){
+          it.estado = 'Sincronizado'; it.sincEn = Date.now(); it.error = ''; it.resp = res;
+          if (it.tipo === 'maestro' && res.colaborador) await dbPut('maestros', {...res.colaborador, pendiente:false});
+        } else if (res.reintentable){
+          it.error = res.mensaje || '';
+        } else {
+          it.estado = 'Error'; it.error = res.mensaje || 'No se pudo registrar.';
+        }
+        await dbPut('outbox', it);
+      }
+      if (lote.every(i => i.estado === 'Pendiente')) break;   // sin avance: se reintenta más tarde
+    }
+  } finally {
+    sincronizando = false;
+    await cargarIndice(); await pintarEstado();
+    if (!$('vistaLista').hidden) actualizarRegistros();
+  }
+}
+async function limpiarHistorial(){
+  const lim = Date.now() - CONFIG.DIAS_HISTORIAL*86400000;
+  for (const i of await dbAll('outbox')) if (i.estado === 'Sincronizado' && (i.sincEn||0) < lim) await dbDel('outbox', i.id);
+}
+
+/* ---------------------------------------------------------------------
+   Resultado en pantalla
+   --------------------------------------------------------------------- */
+function mostrar(tipo, titulo, html){
+  const r = $('resultado');
+  const ic = tipo === 'ok' ? 'ok' : tipo === 'pend' ? 'clock' : 'x-circle';
+  r.className = 'resultado ' + tipo; r.hidden = false;
+  r.innerHTML = `${ico(ic)}<div><h3>${titulo}</h3>${html}</div>`;
+  r.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ---------------------------------------------------------------------
+   Guardar registro de viaje
+   --------------------------------------------------------------------- */
+let guardando = false;
+function reiniciarForm(){
+  deseleccionar(); $('buscar').value = ''; $('limpiar').hidden = true; $('resultados').hidden = true;
+  $('area').value = ''; $('rutaSalida').value = ''; $('rutaRetorno').value = '';
+  ['buscar','area','rutaSalida','rutaRetorno'].forEach(c => err(c,''));
+}
+function botonCargando(btn, txtEl, on, texto){ btn.disabled = on; btn.classList.toggle('cargando', on); txtEl.textContent = texto; }
+
+async function guardar(ev){
+  ev.preventDefault();
+  if (guardando) return;
+  ['buscar','area','rutaSalida','rutaRetorno'].forEach(c => err(c,''));
+  let ok = true, primero = null;
+  const falla = (c, m) => { err(c, m); ok = false; if (!primero) primero = $(c); };
+  if (!sel || !/^\d{8}$/.test(sel.dni) || !sel.nombre || !/^9\d{8}$/.test(String(sel.celular||''))){
+    falla('buscar', sel ? 'Los datos del colaborador están incompletos (DNI, nombre o celular).' : 'Busque y seleccione al colaborador, o regístrelo como nuevo.');
+  }
+  if (!$('area').value) falla('area','Seleccione su área de trabajo.');
+  if (!$('rutaSalida').value) falla('rutaSalida','Seleccione la ruta de salida.');
+  if (!$('rutaRetorno').value) falla('rutaRetorno','Seleccione la ruta de retorno.');
+  if (!ok){ primero.scrollIntoView({behavior:'smooth', block:'center'}); return; }
+
+  guardando = true;
+  const btn = $('btnGuardar'), tx = $('btnTxt');
+  botonCargando(btn, tx, true, 'GUARDANDO…');
+  try{
+    await sincronizarReloj(3500);                      // hora oficial si hay internet
+    if (!evaluarHorario()){
+      mostrar('err','Formulario cerrado','<p>🔒 EL PLAZO DE REGISTRO HA FINALIZADO.</p><p>No se guardó ningún dato.</p>');
+      return;
+    }
+    const item = {
+      id: uuid(), tipo:'viaje', seq: nuevoSeq(), estado:'Pendiente', intentos:0, error:'',
+      creadoEn: new Date(hora()).toISOString(),
+      datos: {dni:sel.dni, nombre:sel.nombre, celular:sel.celular, area:$('area').value, rutaSalida:$('rutaSalida').value, rutaRetorno:$('rutaRetorno').value}
+    };
+    await dbPut('outbox', item);                       // 1º se guarda en el dispositivo
+    reiniciarForm();
+    await pintarEstado();
+    if (navigator.onLine && configurado()){
+      await sincronizar();
+      let f = await dbGet('outbox', item.id);
+      if (f.estado === 'Pendiente'){ await sincronizar(); f = await dbGet('outbox', item.id); }
+    }
+    const f = await dbGet('outbox', item.id);
+    const quien = `<p><b>${esc(item.datos.nombre)}</b> · DNI ${esc(item.datos.dni)}</p>`;
+    const rutas = `<p>${esc(item.datos.area)} · Salida: <b>${esc(item.datos.rutaSalida)}</b> · Retorno: <b>${esc(item.datos.rutaRetorno)}</b></p>`;
+    if (f.estado === 'Sincronizado')
+      mostrar('ok','Registro guardado y sincronizado', quien + rutas + `<p>${fechaLima(new Date(item.creadoEn).getTime())} · Ya figura en Google Sheets.</p>`);
+    else if (f.estado === 'Error')
+      mostrar('err','Error al registrar', quien + `<p>${esc(f.error)}</p><p>Puede corregirlo o reintentar desde “Envíos por sincronizar”.</p>`);
+    else
+      mostrar('pend','Registro almacenado localmente, pendiente de sincronización', quien + rutas +
+        `<p>Quedó guardado en este teléfono y se enviará automáticamente cuando haya internet. <b>No lo registre de nuevo.</b></p>`);
+  } catch(e){
+    mostrar('err','Error al registrar','<p>No se pudo guardar en el dispositivo. Vuelva a intentarlo.</p>');
+  } finally {
+    guardando = false; botonCargando(btn, tx, false, 'GUARDAR REGISTRO'); pintarEstado();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Nuevo colaborador
+   --------------------------------------------------------------------- */
+function normalizarCelular(v){
+  let s = String(v||'').replace(/\D/g,'');
+  if (s.length === 11 && s.startsWith('51')) s = s.slice(2);
+  return /^9\d{8}$/.test(s) ? s : '';
+}
+let guardandoNuevo = false, dupDni = null;
+function abrirNuevo(){
+  ['nDni','nNombre','nCel'].forEach(c => { $(c).value = ''; err(c,''); });
+  $('nDuplicado').hidden = true; dupDni = null;
+  const q = $('buscar').value.trim();
+  if (/^\d{1,8}$/.test(q)) $('nDni').value = q; else if (q && /[a-záéíóúñ]/i.test(q)) $('nNombre').value = q.toUpperCase();
+  $('dlgNuevo').showModal(); $('nDni').focus();
+}
+async function guardarNuevo(ev){
+  ev.preventDefault();
+  if (guardandoNuevo) return;
+  ['nDni','nNombre','nCel'].forEach(c => err(c,''));
+  $('nDuplicado').hidden = true;
+  const dni = $('nDni').value.trim();
+  const nombre = $('nNombre').value.toUpperCase().replace(/\s+/g,' ').trim();
+  const cel = normalizarCelular($('nCel').value);
+  let ok = true;
+  if (!/^\d{8}$/.test(dni)){ err('nDni','El DNI debe tener exactamente 8 dígitos.'); ok = false; }
+  if (nombre.length < 5 || nombre.split(' ').length < 2){ err('nNombre','Escriba apellidos y nombres completos.'); ok = false; }
+  if (!cel){ err('nCel','Ingrese un celular peruano válido: 9 dígitos que empiecen con 9.'); ok = false; }
+  if (!ok) return;
+  if (!estadoHorario(hora()).abierto){ evaluarHorario(); $('dlgNuevo').close(); return; }
+
+  const ya = INDICE.find(m => m.dni === dni);
+  if (ya){
+    dupDni = ya;
+    $('nDuplicadoTxt').textContent = `El DNI ${dni} ya está registrado a nombre de ${ya.nombre}.`;
+    $('nDuplicado').hidden = false; return;
+  }
+  guardandoNuevo = true;
+  const b = $('nGuardar'); botonCargando(b, $('nGuardarTxt'), true, 'GUARDANDO…');
+  try{
+    const item = {id:uuid(), tipo:'maestro', seq:nuevoSeq(), estado:'Pendiente', intentos:0, error:'',
+      creadoEn:new Date(hora()).toISOString(), datos:{dni, nombre, celular:cel}};
+    await dbPut('outbox', item);
+    await dbPut('maestros', {dni, nombre, celular:cel, pendiente:true});
+    await cargarIndice();
+    seleccionar({dni, nombre, celular:cel, pendiente:true});
+    $('dlgNuevo').close();
+    if (navigator.onLine && configurado()){
+      await sincronizar();
+      const f = await dbGet('outbox', item.id);
+      if (f && f.estado === 'Error') mostrar('err','No se pudo registrar al colaborador', `<p>${esc(f.error)}</p>`);
+      else if (f && f.resp && f.resp.estado === 'EXISTIA'){
+        const m = await dbGet('maestros', dni); if (m) seleccionar(m);
+      }
+    }
+  } finally { guardandoNuevo = false; botonCargando(b, $('nGuardarTxt'), false, 'GUARDAR'); pintarEstado(); }
+}
+
+/* ---------------------------------------------------------------------
+   Código de acceso (opcional, lo define el responsable en Apps Script)
+   --------------------------------------------------------------------- */
+function pedirCodigo(){
+  const d = $('dlgCodigo'); if (d.open) return;
+  $('cInput').value = ''; err('cInput','');
+  if (localStorage.getItem('codigo_acceso')) err('cInput','El código no es correcto. Inténtelo otra vez.');
+  d.showModal();
+}
+
+/* ---------------------------------------------------------------------
+   Pestaña "Registros": consulta y modificación de rutas
+   (el servidor decide: máximo de intentos, horario y propiedad del registro)
+   --------------------------------------------------------------------- */
+let REGS_SERVER = [], REGS_TS = 0, REGS = [];
+let MAX_MOD = 2, PEDIR_CEL = true;
+const MAX_FILAS = 150;
+const inicioSemanaPago = ts => {                         // miércoles 00:00 de Lima (en ms)
+  const p = limaParts(ts), dias = (p.dow - 3 + 7) % 7;
+  return Date.UTC(p.y, p.m-1, p.d - dias) + 5*3600000;
+};
+async function cargarRegsCache(){
+  const m = await dbGet('meta','registros');
+  if (m && m.v){ REGS_SERVER = m.v.lista || []; REGS_TS = m.v.ts || 0; MAX_MOD = m.v.max || 2; PEDIR_CEL = m.v.pedir !== false; }
+}
+const guardarRegsCache = () => dbPut('meta', {k:'registros', v:{lista:REGS_SERVER, ts:REGS_TS, max:MAX_MOD, pedir:PEDIR_CEL}});
+async function actualizarRegistros(){
+  if (!configurado() || !navigator.onLine){ await pintarLista(); return; }
+  const b = $('btnRefrescar'); b.disabled = true; $('btnRefTxt').textContent = 'Actualizando…';
+  try{
+    const r = await llamar('GET', {action:'registros'});
+    if (r.ok && Array.isArray(r.datos)){
+      REGS_SERVER = r.datos.map(a => ({dni:a[0], nombre:a[1], fecha:a[2], rutaS:a[3], rutaR:a[4], id:a[5], mods:a[6]}));
+      REGS_TS = Date.now(); MAX_MOD = r.maxMod || 2; PEDIR_CEL = r.pedirCelular !== false;
+      await guardarRegsCache();
+    } else if (r.codigo === 'AUTH') pedirCodigo();
+  }catch(e){ /* sin conexión: se muestra la copia guardada */ }
+  finally { b.disabled = false; $('btnRefTxt').textContent = 'Actualizar lista'; }
+  await pintarLista();
+}
+/* Une la lista del servidor con los registros de este teléfono que aún no llegan (marcados "por enviar") */
+async function construirRegs(){
+  const base = new Map(REGS_SERVER.map(x => [x.dni, {...x, pendiente:false}]));
+  const ini = inicioSemanaPago(hora());
+  for (const i of await dbAll('outbox')){
+    if (i.tipo !== 'viaje' || new Date(i.creadoEn).getTime() < ini || base.has(i.datos.dni)) continue;
+    base.set(i.datos.dni, {dni:i.datos.dni, nombre:i.datos.nombre, fecha:new Date(i.creadoEn).getTime(),
+      rutaS:i.datos.rutaSalida, rutaR:i.datos.rutaRetorno, id:i.id, mods:0, pendiente: i.estado !== 'Sincronizado'});
+  }
+  REGS = [...base.values()].map(x => ({...x, hay: norm(x.dni + ' ' + x.nombre)}))
+        .sort((a,b) => a.nombre.localeCompare(b.nombre,'es'));
+}
+function motivoNoModificar(m){
+  if (m.pendiente) return 'Se podrá modificar cuando se sincronice.';
+  if ((m.mods || 0) >= MAX_MOD) return 'Sin intentos disponibles.';
+  if (!estadoHorario(hora()).abierto) return 'El formulario está cerrado.';
+  if (!navigator.onLine) return 'Para modificar necesita internet.';
+  return '';
+}
+function botonModificar(m){
+  const rest = Math.max(0, MAX_MOD - (m.mods || 0));
+  if (m.pendiente) return `<button type="button" class="btn claro chico" disabled>${ico('clock')}Por enviar</button>`;
+  if (rest <= 0) return `<button type="button" class="btn bloq chico" disabled>${ico('lock')}Bloqueado</button><span class="quedan">Sin intentos</span>`;
+  const mot = motivoNoModificar(m);
+  return `<button type="button" class="btn claro chico" data-mod="${esc(m.dni)}" ${mot ? 'disabled title="' + esc(mot) + '"' : ''}>${ico('swap')}Modificar</button>` +
+         `<span class="quedan">${mot ? esc(mot) : `Quedan ${rest} de ${MAX_MOD}`}</span>`;
+}
+async function pintarLista(){
+  await construirRegs();
+  const q = $('bLista').value; $('limpiarLista').hidden = !q;
+  const t = norm(q).split(' ').filter(Boolean);
+  const f = t.length ? REGS.filter(m => t.every(x => m.hay.includes(x))) : REGS;
+  $('listaMeta').textContent = navigator.onLine
+    ? 'Consulta y modificación de rutas' + (REGS_TS ? ' · actualizado ' + fechaLima(REGS_TS) : '')
+    : 'Sin conexión · lista guardada' + (REGS_TS ? ' el ' + fechaLima(REGS_TS) : '');
+  $('listaConteo').textContent = REGS.length
+    ? (t.length ? `${f.length} de ${REGS.length} colaboradores registrados` : `${REGS.length} colaboradores registrados`)
+    : '';
+  const box = $('listaRegs');
+  if (!REGS.length){
+    box.innerHTML = `<div class="vacio">${ico('list')}<div>${REGS_TS || navigator.onLine ? 'Aún no hay registros guardados en esta semana de pago.' : 'Conéctese a internet para ver la lista de registros.'}</div></div>`;
+    return;
+  }
+  if (!f.length){
+    box.innerHTML = `<div class="vacio">${ico('alert')}<div>No se encontró ningún registro con “${esc(q.trim())}”.</div></div>`;
+    return;
+  }
+  box.innerHTML = '<div class="fila cab"><span class="dni">DNI</span><span class="nom">APELLIDOS Y NOMBRES</span><span class="fec">FECHA DE REGISTRO</span><span class="rs">RUTA SALIDA</span><span class="rr">RUTA RETORNO</span><span class="ac">MODIFICAR</span></div>' +
+    f.slice(0, MAX_FILAS).map(m => `<div class="fila"><span class="dni">${esc(m.dni)}</span><span class="nom">${esc(m.nombre)}${m.pendiente ? '<em class="badge-pend">por enviar</em>' : ''}</span>` +
+      `<span class="fec"><i class="pre">Registro: </i>${m.fecha ? fechaLima(m.fecha) : '—'}</span>` +
+      `<span class="rs"><i class="pre">Salida: </i><b>${esc(m.rutaS || '—')}</b></span>` +
+      `<span class="rr"><i class="pre">Retorno: </i><b>${esc(m.rutaR || '—')}</b></span>` +
+      `<span class="ac">${botonModificar(m)}</span></div>`).join('') +
+    (f.length > MAX_FILAS ? `<div class="vacio">Se muestran ${MAX_FILAS} de ${f.length}. Escriba más letras o el DNI para afinar.</div>` : '');
+}
+let avisoTimer;
+function avisoLista(tipo, html){
+  const a = $('listaAviso'); a.className = 'aviso ' + tipo; a.hidden = false;
+  a.innerHTML = ico(tipo === 'verde' ? 'ok' : 'alert') + `<p>${html}</p>`;
+  clearTimeout(avisoTimer); avisoTimer = setTimeout(() => a.hidden = true, 9000);
+}
+
+/* ---- Modificar rutas ---- */
+let editando = null, guardandoMod = false;
+function abrirMod(dni){
+  const m = REGS.find(x => x.dni === dni); if (!m) return;
+  const mot = motivoNoModificar(m); if (mot){ avisoLista('rojo', esc(mot)); return; }
+  editando = m;
+  ['mSalida','mRetorno','mCel'].forEach(c => err(c,''));
+  $('mError').hidden = true; $('mCel').value = '';
+  $('mQuien').innerHTML = `<b>${esc(m.nombre)}</b> · DNI ${esc(m.dni)}`;
+  const rest = MAX_MOD - (m.mods || 0);
+  $('mRestan').textContent = `Le quedan ${rest} de ${MAX_MOD} modificaciones. Al guardar se usa 1 y no se puede deshacer.`;
+  $('mSalida').value = m.rutaS; $('mRetorno').value = m.rutaR;
+  $('mCelBox').hidden = !PEDIR_CEL;
+  $('dlgMod').showModal();
+}
+async function guardarMod(ev){
+  ev.preventDefault();
+  if (guardandoMod || !editando) return;
+  ['mSalida','mRetorno','mCel'].forEach(c => err(c,'')); $('mError').hidden = true;
+  const s = $('mSalida').value, r = $('mRetorno').value, cel = normalizarCelular($('mCel').value);
+  if (s === editando.rutaS && r === editando.rutaR){ err('mSalida','Cambie la ruta de salida y/o la de retorno para guardar.'); return; }
+  if (PEDIR_CEL && !cel){ err('mCel','Escriba su celular de 9 dígitos (el que está registrado).'); return; }
+  const btn = $('mGuardar'); guardandoMod = true; botonCargando(btn, $('mGuardarTxt'), true, 'GUARDANDO…');
+  const falla = (txt) => { $('mErrorTxt').textContent = txt; $('mError').hidden = false; };
+  try{
+    await sincronizarReloj(3500);
+    if (!evaluarHorario()){ $('dlgMod').close(); avisoLista('rojo','🔒 EL PLAZO DE REGISTRO HA FINALIZADO. No se pueden modificar rutas.'); return; }
+    let res;
+    try{ res = await llamar('POST', {action:'modificarRuta', id:editando.id, dni:editando.dni, rutaSalida:s, rutaRetorno:r, celular:cel}); }
+    catch(e){ falla('No se pudo conectar con el servidor. Revise su internet e intente de nuevo. No se gastó ningún intento.'); return; }
+    if (res && res.ok){
+      const x = REGS_SERVER.find(z => z.dni === editando.dni);
+      if (x){ x.rutaS = res.rutaSalida; x.rutaR = res.rutaRetorno; x.mods = res.modificaciones; }
+      await guardarRegsCache();
+      $('dlgMod').close();
+      avisoLista('verde', `Rutas actualizadas para <b>${esc(editando.nombre)}</b>. ` + (res.restantes > 0 ? `Le queda ${res.restantes} modificación.` : 'Ya no tiene más modificaciones disponibles.'));
+      await pintarLista();
+    } else {
+      if (res && res.codigo === 'AUTH'){ $('dlgMod').close(); pedirCodigo(); return; }
+      falla((res && res.mensaje) || 'No se pudo guardar.');
+      if (res && ['LIMITE','FUERA_HORARIO','SEMANA_ANTERIOR','SIN_CAMBIOS','NO_EXISTE'].includes(res.codigo)) actualizarRegistros();
+    }
+  } finally { guardandoMod = false; botonCargando(btn, $('mGuardarTxt'), false, 'GUARDAR CAMBIOS'); }
+}
+function irVista(v){
+  const lista = v === 'lista';
+  $('vistaRegistro').hidden = lista; $('vistaLista').hidden = !lista;
+  $('wrap').classList.toggle('ancho', lista);
+  $('tabRegistro').setAttribute('aria-selected', String(!lista));
+  $('tabLista').setAttribute('aria-selected', String(lista));
+  history.replaceState(null, '', lista ? '#registros' : location.pathname + location.search);
+  if (lista){ pintarLista(); if (navigator.onLine && Date.now() - REGS_TS > 30000) actualizarRegistros(); }
+}
+
+/* ---------------------------------------------------------------------
+   Arranque y eventos
+   --------------------------------------------------------------------- */
+function enlazar(){
+  $('tabRegistro').addEventListener('click', () => irVista('registro'));
+  $('tabLista').addEventListener('click', () => irVista('lista'));
+  $('bLista').addEventListener('input', pintarLista);
+  $('limpiarLista').addEventListener('click', () => { $('bLista').value = ''; pintarLista(); $('bLista').focus(); });
+  $('btnRefrescar').addEventListener('click', actualizarRegistros);
+  $('listaRegs').addEventListener('click', e => { const b = e.target.closest('[data-mod]'); if (b) abrirMod(b.dataset.mod); });
+  $('formMod').addEventListener('submit', guardarMod);
+  $('mCancelar').addEventListener('click', () => $('dlgMod').close());
+  $('mCel').addEventListener('input', e => e.target.value = e.target.value.replace(/[^\d+ ]/g,'').slice(0,14));
+  $('buscar').addEventListener('input', () => { if (sel && norm($('buscar').value) !== norm(sel.nombre)) deseleccionar(); pintarResultados(); });
+  $('buscar').addEventListener('focus', pintarResultados);
+  $('limpiar').addEventListener('click', () => { deseleccionar(); $('buscar').value = ''; pintarResultados(); $('buscar').focus(); });
+  $('resultados').addEventListener('click', e => {
+    const r = e.target.closest('.res'); if (r){ const m = INDICE.find(x => x.dni === r.dataset.dni); if (m) seleccionar(m); return; }
+    if (e.target.closest('#btnNuevo')) abrirNuevo();
+  });
+  $('form').addEventListener('submit', guardar);
+  $('formNuevo').addEventListener('submit', guardarNuevo);
+  $('nCancelar').addEventListener('click', () => $('dlgNuevo').close());
+  $('btnUsarExistente').addEventListener('click', () => { if (dupDni) seleccionar(dupDni); $('dlgNuevo').close(); });
+  $('nDni').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,8));
+  $('chipPend').addEventListener('click', () => { fallos = 0; sincronizar(); });
+  $('listaPend').addEventListener('click', async e => {
+    const r = e.target.closest('[data-reint]'), d = e.target.closest('[data-desc]');
+    if (r){ const it = await dbGet('outbox', r.dataset.reint); it.estado = 'Pendiente'; it.error = ''; await dbPut('outbox', it); fallos = 0; await pintarEstado(); sincronizar(); }
+    if (d && confirm('¿Descartar este envío? No se enviará a Google Sheets.')){ await dbDel('outbox', d.dataset.desc); pintarEstado(); }
+  });
+  $('formCodigo').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = $('cInput').value.trim(); if (!v){ err('cInput','Escriba el código.'); return; }
+    localStorage.setItem('codigo_acceso', v); $('dlgCodigo').close();
+    fallos = 0; actualizarMaestros(); sincronizar();
+  });
+  $('cCancelar').addEventListener('click', () => $('dlgCodigo').close());
+
+  window.addEventListener('online',  async () => { await sincronizarReloj(); evaluarHorario(); actualizarMaestros(); fallos = 0; sincronizar(); pintarEstado(); });
+  window.addEventListener('offline', () => { pintarEstado(); if (!$('vistaLista').hidden) pintarLista(); });
+
+  let ev;
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); ev = e; $('btnInstalar').hidden = false; });
+  $('btnInstalar').addEventListener('click', async () => { if (!ev) return; ev.prompt(); await ev.userChoice; ev = null; $('btnInstalar').hidden = true; });
+  window.addEventListener('appinstalled', () => $('btnInstalar').hidden = true);
+}
+
+(async function iniciar(){
+  llenarSelects();
+  $('avisoConfig').hidden = configurado();
+  try{
+    await abrirDB();
+  }catch(e){
+    mostrar('err','Este navegador no permite guardar datos','<p>Abra la aplicación en Chrome (Android) o Safari (iPhone) fuera del modo privado.</p>'); return;
+  }
+  const o = await dbGet('meta','offset'); if (o) offset = o.v;
+  const dm = await dbGet('meta','desactiva'); if (dm) desactiva = dm.v;
+  const hm = await dbGet('meta','habilita'); if (hm) habilita = hm.v;
+  enlazar();
+  await limpiarHistorial();
+  await cargarIndice(); await cargarRegsCache();
+  evaluarHorario(); await pintarEstado();
+  if (location.hash === '#registros') irVista('lista');
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  if (navigator.onLine){
+    await sincronizarReloj(); evaluarHorario();
+    await actualizarMaestros(); sincronizar();
+  }
+  setInterval(evaluarHorario, 20000);
+  setInterval(async () => { if (navigator.onLine && !guardando) { await sincronizarReloj(); evaluarHorario(); } }, 60000);  // detecta cambios de la fecha manual
+  setInterval(async () => {                              // reintentos automáticos controlados
+    if (!navigator.onLine || sincronizando || Date.now() < proxAuto) return;
+    if ((await dbAll('outbox')).some(i => i.estado === 'Pendiente')) sincronizar();
+  }, 15000);
+  setInterval(() => { if (navigator.onLine && !sincronizando) actualizarMaestros(); }, 10*60*1000);
+})();
+</script>
+</body>
+</html>
