@@ -1,4 +1,4 @@
-# Registro de Salidas & Retornos – Agrícola Huarmey
+# Registro de Salidas & Retornos – Producción (Agrícola Huarmey)
 Guía de instalación (sin conocimientos de programación)
 
 ## 1. Qué contiene la carpeta
@@ -22,13 +22,13 @@ Guía de instalación (sin conocimientos de programación)
 
 1. Abra el archivo **REGISTROS VIAJES**.
 2. Verifique que existan **dos hojas** con estos nombres exactos (minúsculas):
-   - `maestros` → columnas: `DNI`, `APELLIDOS Y NOMBRES`, `CELULAR`
-   - `packing` → columnas A–G: `FECHA REGISTRO`, `DNI`, `NOMBRES Y APELLIDOS`, `CELULAR`, `AREA`, `RUTA SALIDA`, `RUTA RETORNO`
-3. No cambie esos nombres ni el orden. La app agregará 3 columnas de control a la derecha en `packing`: `ID REGISTRO` (evita duplicados), `ORIGEN` (EN LINEA / DIFERIDO) y `FECHA SINCRONIZACION`.
+   - `maestros` (la misma que usa la otra app; se comparte) → columnas: `DNI`, `APELLIDOS Y NOMBRES`, `CELULAR`
+   - `campo` → columnas A–G: `FECHA REGISTRO`, `DNI`, `NOMBRES Y APELLIDOS`, `CELULAR`, `AREA`, `RUTA SALIDA`, `RUTA RETORNO`
+3. No cambie esos nombres ni el orden. La app agregará 3 columnas de control a la derecha en `campo`: `ID REGISTRO` (evita duplicados), `ORIGEN` (EN LINEA / DIFERIDO) y `FECHA SINCRONIZACION`.
 4. Copie el **ID del archivo**: en la barra del navegador, es el texto largo entre `/d/` y `/edit`.
    Ejemplo: `https://docs.google.com/spreadsheets/d/`**`1AbC...xyz`**`/edit`
 
-> Nota: en la hoja `packing` el campo AREA se guarda **sin emoji** (por ejemplo `ALMACÉN`) para que sea fácil de filtrar en Excel o Power BI.
+> Nota: en la hoja `campo` el campo AREA se guarda **sin emoji** (por ejemplo `ALMACÉN`) para que sea fácil de filtrar en Excel o Power BI.
 
 ## 3. Crear el backend en Google Apps Script
 
@@ -97,7 +97,7 @@ Una PWA **solo se instala y funciona sin internet desde una dirección HTTPS**. 
 | 7 | Intentar registrar un DNI ya existente | Aviso "ya está registrado" y opción **Usar este colaborador**; no se duplica. |
 | 8 | Elegir rutas distintas de salida y retorno | Se guardan ambas en F y G. |
 | 9 | Elegir **NINGUNO** | Se guarda `NINGUNO`. |
-| 10 | Guardar un registro con internet | Mensaje verde "guardado y sincronizado"; fila nueva en `packing` con fecha de Lima. |
+| 10 | Guardar un registro con internet | Mensaje verde "guardado y sincronizado"; fila nueva en `campo` con fecha de Lima. |
 | 11 | Activar modo avión → guardar un registro | Mensaje ámbar "pendiente"; el contador muestra "1 pendiente". |
 | 12 | Desactivar modo avión | Se sincroniza solo; el contador baja a 0; aparece 1 fila. |
 | 13 | Tocar varias veces GUARDAR / reintentar | Una sola fila (el botón se bloquea y el ID único evita duplicados). |
@@ -135,7 +135,7 @@ Una PWA **solo se instala y funciona sin internet desde una dirección HTTPS**. 
 
 ## 11. Desactivar la app con una fecha manual
 
-1. Abra el Google Sheets y vaya a la hoja **`config`** (la crea `configurarHojas`; si ya la ejecutó antes, vuelva a ejecutarla una vez).
+1. Abra el Google Sheets y vaya a la hoja **`config_campo`** (la crea `configurarHojas`; si ya la ejecutó antes, vuelva a ejecutarla una vez).
 2. En la celda **B1** escriba la fecha y hora desde la cual la app queda desactivada, por ejemplo `16/10/2026 17:00` (hora de Perú). Si escribe solo la fecha, se desactiva desde las 00:00 de ese día.
 3. Desde ese momento la app muestra "🔒 EL PLAZO DE REGISTRO HA FINALIZADO." y bloquea nuevos registros, aunque sea miércoles o jueves. El servidor también lo rechaza.
 4. Para volver a activarla, **borre la celda B1** o escriba una fecha posterior.
@@ -146,7 +146,7 @@ Una PWA **solo se instala y funciona sin internet desde una dirección HTTPS**. 
 
 ### Habilitar la app manualmente (fuera de miércoles y jueves)
 
-En la hoja **`config`** (ejecute `configurarHojas` otra vez para que aparezca la fila nueva):
+En la hoja **`config_campo`** (ejecute `configurarHojas` otra vez para que aparezca la fila nueva):
 
 | Celda | Qué hace |
 |---|---|
@@ -175,17 +175,17 @@ En la pestaña **Registros** cada persona se ve con: DNI, APELLIDOS Y NOMBRES, F
 
 **Cómo funciona**
 1. El colaborador toca **Modificar**, cambia la ruta de salida y/o la de retorno y escribe su **celular** para confirmar que el registro es suyo.
-2. Al guardar, la app actualiza las columnas **RUTA SALIDA** y **RUTA RETORNO** de la hoja `packing`.
+2. Al guardar, la app actualiza las columnas **RUTA SALIDA** y **RUTA RETORNO** de la hoja `campo`.
 3. Cada registro tiene **2 modificaciones** (`MAX_MODIFICACIONES` en `Codigo.gs`). Solo se gasta un intento cuando el cambio se guarda de verdad. Si el celular es incorrecto, si no hay cambios o si falla la conexión, **no se gasta intento**.
 4. Con las 2 modificaciones usadas, el botón queda **gris y bloqueado ("Bloqueado – Sin intentos")** y el servidor rechaza cualquier cambio posterior, aunque alguien intente saltarse la pantalla.
 
 **Reglas**
-- Solo se puede modificar con **internet** y con el formulario **habilitado** (miércoles/jueves hasta las 5:00 p. m., o según su fecha manual de la hoja `config`). Fuera de ese plazo el botón aparece deshabilitado.
+- Solo se puede modificar con **internet** y con el formulario **habilitado** (miércoles/jueves hasta las 5:00 p. m., o según su fecha manual de la hoja `config_campo`). Fuera de ese plazo el botón aparece deshabilitado.
 - Solo se pueden modificar registros de la **semana de pago actual**.
 - Se modifica el registro **más reciente** de cada DNI (el que se ve en la lista). Los registros "por enviar" se podrán modificar cuando se sincronicen.
 - Tras 5 celulares incorrectos para un mismo DNI, se bloquea 10 minutos. Si no quiere pedir el celular, ponga `PEDIR_CELULAR_PARA_MODIFICAR: false` (cualquiera podría modificar el registro de otro; no se recomienda).
 
-**Hoja `packing`: columnas nuevas** (ejecute `configurarHojas` otra vez para que se agreguen los encabezados)
+**Hoja `campo`: columnas nuevas** (ejecute `configurarHojas` otra vez para que se agreguen los encabezados)
 
 | Columna | Contenido |
 |---|---|
@@ -194,3 +194,14 @@ En la pestaña **Registros** cada persona se ve con: DNI, APELLIDOS Y NOMBRES, F
 | M · HISTORIAL MODIFICACIONES | Cada cambio: fecha, ruta anterior y ruta nueva. |
 
 **Para actualizar:** pegue el nuevo `Codigo.gs`, ejecute `configurarHojas` una vez, publique una **nueva versión** (sección 4, paso 5) y suba otra vez `index.html` y `service-worker.js`.
+
+
+---
+
+## 14. Esta es la versión "Producción" (duplicado)
+
+- Usa el **mismo Google Sheets** (REGISTROS VIAJES) y la **misma hoja `maestros`**, pero guarda los viajes en la hoja **`campo`** y las fechas manuales en **`config_campo`** (así no se mezcla con la app anterior).
+- **Debe crear un Apps Script nuevo** (sección 3 y 4) con este `Codigo.gs` y pegar la URL `/exec` nueva en `index.html`. No reutilice la URL de la app anterior: esa escribe en `packing`.
+- Si aloja ambas apps en el mismo dominio (por ejemplo GitHub Pages), cada una va en **su propia carpeta/repositorio**. Los nombres internos ya son distintos para que no se pisen.
+- Copie a esta carpeta los archivos `icon-192.png`, `icon-512.png` y `apple-touch-icon.png` de la app original.
+- Ejecute `configurarHojas` una vez: creará la hoja `campo` con sus encabezados.
