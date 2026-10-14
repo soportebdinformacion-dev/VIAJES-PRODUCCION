@@ -982,6 +982,9 @@ function motivoNoModificar(m){
   if (!navigator.onLine) return 'Para modificar necesita internet.';
   return '';
 }
+
+/* Código para habilitar el botón "Modificar"
+
 function botonModificar(m){
   const rest = Math.max(0, MAX_MOD - (m.mods || 0));
   if (m.pendiente) return `<button type="button" class="btn claro chico" disabled>${ico('clock')}Por enviar</button>`;
@@ -989,7 +992,14 @@ function botonModificar(m){
   const mot = motivoNoModificar(m);
   return `<button type="button" class="btn claro chico" data-mod="${esc(m.dni)}" ${mot ? 'disabled title="' + esc(mot) + '"' : ''}>${ico('swap')}Modificar</button>` +
          `<span class="quedan">${mot ? esc(mot) : `Quedan ${rest} de ${MAX_MOD}`}</span>`;
+} */
+
+/* Código para deshabilitar el botón "Modificar" */
+
+function botonModificar(m){
+  return `<button type="button" class="btn bloq chico" disabled>${ico('lock')}Deshabilitado</button>`;
 }
+
 async function pintarLista(){
   await construirRegs();
   const q = $('bLista').value; $('limpiarLista').hidden = !q;
